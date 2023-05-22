@@ -5,6 +5,7 @@ import com.edu.security.Repository.UserRepository;
 import com.edu.security.Security.AppJwtHandler;
 import com.edu.security.Security.BearerTokenServerAuthenticationConverter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,6 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Value("${jwt.secret}")
     private String secret;
 
     private final String [] publicRoutes = {"/user/register", "/user/login"};
