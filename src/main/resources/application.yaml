@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Security
+    username: postgres
+    password: Ufym->q-b-Vjyf
+  flyway:
+    url: jdbc:postgresql://localhost:5432/Security
+    locations: classpath:db/migration
+    user: postgres
+    password: Ufym->q-b-Vjyf
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    root: DEBUG
