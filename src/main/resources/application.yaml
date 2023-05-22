@@ -2,15 +2,20 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/Security
     username: postgres
-    password: Ufym->q-b-Vjyf
+    password: postgres
   flyway:
     url: jdbc:postgresql://localhost:5432/Security
     locations: classpath:db/migration
     user: postgres
-    password: Ufym->q-b-Vjyf
+    password: postgres
   jpa:
     hibernate:
       ddl-auto: update
 logging:
   level:
     root: DEBUG
+
+jwt:
+  secret: b5f59337a612a2a7dc07328f3e7d1a04722967c7f06df20a499a7d3f91ff2a7e
+  expiration: 3600
+  issuer: verylucky

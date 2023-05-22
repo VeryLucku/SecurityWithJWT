@@ -1,23 +1,17 @@
 package com.edu.security.SecConfig;
 
 import com.edu.security.Models.Entities.CustomUserDetails;
-import com.edu.security.Models.Entities.UserEntity;
 import com.edu.security.Repository.UserRepository;
 import com.edu.security.Security.AppJwtHandler;
 import com.edu.security.Security.BearerTokenServerAuthenticationConverter;
-import com.edu.security.Security.MyAuthenticationManager;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 
 @Slf4j
 @EnableWebSecurity
@@ -35,7 +28,7 @@ public class SecurityConfig {
 
     private String secret;
 
-    private final String [] publicRoutes = {"/user/register", "/user/login"}
+    private final String [] publicRoutes = {"/user/register", "/user/login"};
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {

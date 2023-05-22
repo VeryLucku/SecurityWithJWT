@@ -5,12 +5,10 @@ import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
 
-@Component
 @RequiredArgsConstructor
 public class AppJwtHandler {
 
