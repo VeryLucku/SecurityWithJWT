@@ -1,13 +1,19 @@
 package com.edu.security.Controller;
 
 import com.edu.security.Mapper.UserMapper;
+import com.edu.security.Models.DTO.AuthRequestDto;
+import com.edu.security.Models.DTO.AuthResponseDto;
 import com.edu.security.Models.DTO.UserDTO;
 import com.edu.security.Models.Entities.UserEntity;
+import com.edu.security.Security.CustomPrincipal;
+import com.edu.security.Security.SecurityService;
+import com.edu.security.Security.TokenDetails;
 import com.edu.security.Service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -20,6 +26,7 @@ public class UserController {
 
     private final UserService userService;
     private final UserMapper userMapper;
+    private final SecurityService securityService;
 
     @PostMapping("/register")
     public UserDTO registerUser(@Valid @RequestBody UserDTO userDTO) {
@@ -31,12 +38,24 @@ public class UserController {
                 );
     }
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
+    @PostMapping("/login")
+    public AuthResponseDto login (@RequestBody AuthRequestDto dto) {
+        TokenDetails tokenDetails = securityService.authenticate(dto.getUsername(), dto.getPassword());
+        return AuthResponseDto.builder()
+                .userId(tokenDetails.getUserId())
+                .token(tokenDetails.getToken())
+                .issuedAt(tokenDetails.getIssuesAt())
+                .expiresAt(tokenDetails.getExpiresAt())
+                .build();
+    }
+
+    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/info")
-    public UserDTO getUserInfo(@RequestParam UUID userId) {
+    public UserDTO getUserInfo(@AuthenticationPrincipal CustomPrincipal principal) {
         return userMapper.map(
-                userService.findById(userId)
+                userService.findById(principal.id())
         );
     }
+
 
 }

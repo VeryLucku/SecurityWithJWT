@@ -5,14 +5,18 @@ import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 import java.util.Date;
 
+@Component
 @RequiredArgsConstructor
 public class AppJwtHandler {
 
-    private final String secret;
+    @Value("${jwt.secret}")
+    private String secret;
 
 
     public VerificationResult check(String accessToken) {
@@ -31,6 +35,7 @@ public class AppJwtHandler {
     }
 
     private Claims getClaimsFromToken(String token) {
+        System.out.println(token);
         return Jwts.parser()
                 .setSigningKey(Base64.getEncoder().encodeToString(secret.getBytes()))
                 .parseClaimsJws(token)

@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 public class MyAuthenticationManager implements AuthenticationManager {
@@ -21,13 +20,16 @@ public class MyAuthenticationManager implements AuthenticationManager {
 
         CustomPrincipal principal = (CustomPrincipal) authentication.getPrincipal();
 
-        UserEntity user =  userService.findById(principal.getId());
+        UserEntity user =  userService.findById(principal.id());
 
         if (!user.isEnabled()) {
             throw new DisabledException("User disabled");
         }
 
+
         return authentication;
 
     }
 }
+
+

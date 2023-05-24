@@ -2,12 +2,15 @@ package com.edu.security.Security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.function.Function;
 
+@Component
 @RequiredArgsConstructor
 public class BearerTokenServerAuthenticationConverter implements AuthenticationConverter {
 
@@ -17,12 +20,11 @@ public class BearerTokenServerAuthenticationConverter implements AuthenticationC
 
     @Override
     public Authentication convert(HttpServletRequest request) {
-        extractHeader(request)
+        return extractHeader(request)
                 .map(getBearerValue)
                 .map(jwtHandler::check)
-                .map(UserAuthenticationBearer::create);
-
-        return null;
+                .map(UserAuthenticationBearer::create)
+                .orElseThrow(() -> new AuthenticationCredentialsNotFoundException(""));
     }
 
     private Optional<String> extractHeader(HttpServletRequest request) {

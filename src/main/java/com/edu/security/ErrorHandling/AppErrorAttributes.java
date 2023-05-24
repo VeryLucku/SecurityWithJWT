@@ -1,5 +1,5 @@
 package com.edu.security.ErrorHandling;
-/*
+
 import jakarta.security.auth.message.AuthException;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -25,17 +25,21 @@ public class AppErrorAttributes extends DefaultErrorAttributes {
     @Override
     public Map<String, Object> getErrorAttributes(WebRequest request, ErrorAttributeOptions options) {
         var errorAttributes = super.getErrorAttributes(request, ErrorAttributeOptions.defaults());
+        //errorAttributes.clear();
         var error = getError(request);
-
+        if (error == null) {
+            error = new NullPointerException("Yes");
+        }
         var errorList = new ArrayList<Map<String, Object>>();
 
-        if (error instanceof AuthException || error instanceof SignatureException) {
+        if (error instanceof AuthException || error instanceof SignatureException
+        || error instanceof io.jsonwebtoken.MalformedJwtException) {
             status = HttpStatus.UNAUTHORIZED;
             var errorMap = new LinkedHashMap<String, Object>();
             errorMap.put("message", error.getMessage());
             errorList.add(errorMap);
         } else {
-            status = HttpStatus.BAD_REQUEST;
+            status = HttpStatus.INTERNAL_SERVER_ERROR;
             var message = error.getMessage();
             if (message == null)
                 message = error.getClass().getName();
@@ -46,13 +50,13 @@ public class AppErrorAttributes extends DefaultErrorAttributes {
             errorList.add(errorMap);
         }
 
-        var errors = new HashMap<String, Object>();
-        errors.put("errors", errorList);
         errorAttributes.put("status", status.value());
-        errorAttributes.put("errors", errors);
+        errorAttributes.put("errors", errorList);
 
         return errorAttributes;
     }
 }
 
- */
+
+
+

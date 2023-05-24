@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Base64;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,10 +26,9 @@ public class SecurityService {
     private String issuer;
 
     private TokenDetails generateToken(UserEntity user) {
-        Map<String, Object> claims = Map.of(
-                "role", user.getRole(),
-                "username", user.getUsername()
-        );
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
+        claims.put("username", user.getUsername());
 
         return generateToken(claims, user.getId().toString());
     }
