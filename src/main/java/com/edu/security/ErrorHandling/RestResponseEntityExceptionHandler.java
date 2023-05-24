@@ -1,4 +1,4 @@
-package com.edu.security.Controller;
+package com.edu.security.ErrorHandling;
 
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.RequestDispatcher;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
-            = { MalformedJwtException.class })
+            = { MalformedJwtException.class, NullPointerException.class })
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected Map<String, Object> handleBadRequest(Exception ex) {
         return getErrorResponse(HttpStatus.BAD_REQUEST, ex);
