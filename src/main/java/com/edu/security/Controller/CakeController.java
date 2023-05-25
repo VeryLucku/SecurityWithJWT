@@ -2,12 +2,13 @@ package com.edu.security.Controller;
 
 import com.edu.security.Mapper.CakeMapper;
 import com.edu.security.Models.DTO.CakeDTO;
-import com.edu.security.Repository.CakeRepository;
+import com.edu.security.Models.Entities.CakeIngredient;
 import com.edu.security.Service.CakeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -28,5 +29,11 @@ public class CakeController {
         return cakeMapper.map(cakeService.getCakeById(id));
     }
 
+    @GetMapping("/byIng")
+    public List<CakeDTO> getCakesByIngredient(@RequestParam CakeIngredient type) {
+        return cakeService.getCakesByIngredient(type).stream()
+                .map(cakeMapper::map)
+                .toList();
+    }
 
 }

@@ -1,30 +1,24 @@
 package com.edu.security.ErrorHandling;
 
 import io.jsonwebtoken.MalformedJwtException;
-import jakarta.servlet.RequestDispatcher;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.error.ErrorAttributeOptions;
-import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(value
-            = { MalformedJwtException.class, NullPointerException.class })
+            = { MalformedJwtException.class, NullPointerException.class,
+            MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected Map<String, Object> handleBadRequest(Exception ex) {
         return getErrorResponse(HttpStatus.BAD_REQUEST, ex);
@@ -38,14 +32,30 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         return getErrorResponse(HttpStatus.UNAUTHORIZED, ex);
     }
 
+    @ExceptionHandler(value =
+            {Exception.class})
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    protected Map<String, Object> handleOther(Exception ex) {
+        return getErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex);
+    }
+
+
+
 
     private Map<String, Object> getErrorResponse(HttpStatus status, Exception ex) {
         String exMessage = ex.getMessage() == null || ex.getMessage().equals("") ?
             ex.getClass().getName() : ex.getMessage();
 
-        return Map.of(
-                "status", status.value(),
+        Map<String, Object> map = new LinkedHashMap<>();
+        map.put(
+                "status", status.value()
+        );
+        map.put(
                 "message", exMessage
         );
+        map.put(
+                "exception", ex.getClass()
+        );
+        return map;
     }
 }

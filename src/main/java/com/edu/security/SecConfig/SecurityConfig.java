@@ -2,7 +2,6 @@ package com.edu.security.SecConfig;
 
 import com.edu.security.Security.FilterChainExceptionHandler;
 import com.edu.security.Security.JwtAuthenticationFilter;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

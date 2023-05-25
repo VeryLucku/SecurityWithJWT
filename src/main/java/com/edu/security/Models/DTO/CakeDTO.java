@@ -2,6 +2,7 @@ package com.edu.security.Models.DTO;
 
 import com.edu.security.Models.Entities.CakeIngredient;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class CakeDTO {
     private String name;
 
     @NotNull
+    @Min(0)
     private Integer cost;
 
     private Set<CakeIngredient> types;
